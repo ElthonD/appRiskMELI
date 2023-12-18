@@ -281,7 +281,7 @@ with c28:
         d28 = d28[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d28.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
-c29, c30, c31 = st.columns([1,1,1])
+c29, c30, c31, c32, c33, c34, c35 = st.columns([1,1,1,1,1,1,1])
 with c29:
     with st.container(border=True):
         st.header("29")
@@ -304,3 +304,15 @@ with c31:
         d31 = day31.apply(lambda x: x[x['Día'] == 31])
         d31 = d31[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d31.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c32:
+    st.container(border=None)
+
+with c33:
+    st.container(border=None)
+
+with c34:
+    st.container(border=None)
+
+with c35:
+    st.container(border=None)
