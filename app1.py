@@ -60,13 +60,14 @@ if allb1:
     df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 else:
     sorted_unique_mes = sorted(df['Mes'].unique())
-    selected_mes = container1.multiselect('Mes(es)', sorted_unique_mes, key="Mes2")
+    selected_mes = container1.multiselect('Mes(es):', sorted_unique_mes, key="Mes2")
     df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
     with st.container(border=True):
-        st.header("1")
+        #st.header("1")
+        st.markdown("<h3 style='text-align: left;'>1</h3>", unsafe_allow_html=True)
         day1 = df_selected_mes.groupby(by=['Día'])
         d1 = day1.apply(lambda x: x[x['Día'] == 1])
         d1 = d1[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
