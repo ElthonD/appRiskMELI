@@ -40,7 +40,6 @@ def load_HR():
 
     return Robos
 
-
 df = load_HR()
 
 df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
@@ -61,7 +60,7 @@ if allb1:
     df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 else:
     sorted_unique_mes = sorted(df['Mes'].unique())
-    selected_mes = container1.multiselect('Mes(es)', sorted_unique_mes, key="Mes1")
+    selected_mes = container1.multiselect('Mes(es)', sorted_unique_mes, key="Mes2")
     df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
@@ -120,6 +119,7 @@ with c7:
         d7 = day7.apply(lambda x: x[x['Día'] == 7])
         d7 = d7[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d7.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
 c8, c9, c10, c11, c12, c13, c14 = st.columns([1,1,1,1,1,1,1])
 with c8:
     with st.container(border=True):
@@ -233,7 +233,6 @@ with c21:
         d21 = day21.apply(lambda x: x[x['Día'] == 21])
         d21 = d21[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d21.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
-
 
 c22, c23, c24, c25, c26, c27, c28 = st.columns([1,1,1,1,1,1,1])
 with c22:
