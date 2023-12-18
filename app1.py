@@ -48,6 +48,12 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
 
+st.set_page_config(
+    page_title="AI27",
+    page_icon="🧊",
+    layout="wide",
+)
+
 container1 = st.container(border=True)
 container1.write("This is inside the container1")
 container2 = st.container(border=True)
