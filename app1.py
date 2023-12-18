@@ -40,7 +40,7 @@ df = load_HR()
 
 df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
 
-df['Estatus'] = df['Tipo evento'].applymap(lambda x: 1 if x == "Consumado" else "Recuperado")
+df['Estatus'] = df['Tipo evento'].map(lambda x: 1 if x == "Consumado" else "Recuperado")
 
 #def _color_red_or_green(val):
     #color = 'red' if val == 0 else 'green'
