@@ -281,7 +281,7 @@ with c28:
         d28 = d28[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d28.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
-c29, c30, c31 = st.columns([1,1,1,1,1,1,1])
+c29, c30, c31 = st.columns([1,1,1])
 with c29:
     with st.container(border=True):
         st.header("29")
