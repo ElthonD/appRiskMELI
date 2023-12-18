@@ -53,11 +53,6 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
 
-container1 = st.container(border=True)
-container1.write("This is inside the container1")
-container2 = st.container(border=True)
-container2.write("This is inside the container2")
-
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
     with st.container(border=True):
@@ -73,7 +68,7 @@ with c2:
         day2 = df.groupby(by=['Día'])
         d2 = day2.apply(lambda x: x[x['Día'] == 2])
         d2 = d2[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d2.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
+        st.dataframe(d2.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c3:
     with st.container(border=True):
@@ -81,7 +76,7 @@ with c3:
         day3 = df.groupby(by=['Día'])
         d3 = day3.apply(lambda x: x[x['Día'] == 3])
         d3 = d3[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d3.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
+        st.dataframe(d3.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c4:
     with st.container(border=True):
@@ -89,7 +84,7 @@ with c4:
         day4 = df.groupby(by=['Día'])
         d4 = day4.apply(lambda x: x[x['Día'] == 4])
         d4 = d4[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d4.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
+        st.dataframe(d4.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c5:
     with st.container(border=True):
@@ -105,7 +100,7 @@ with c6:
         day6 = df.groupby(by=['Día'])
         d6 = day6.apply(lambda x: x[x['Día'] == 6])
         d6 = d6[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d6.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
+        st.dataframe(d6.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c7:
     with st.container(border=True):
@@ -113,5 +108,5 @@ with c7:
         day7 = df.groupby(by=['Día'])
         d7 = day7.apply(lambda x: x[x['Día'] == 7])
         d7 = d7[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d7.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
+        st.dataframe(d7.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
