@@ -53,19 +53,16 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
 
-b1 = st.columns(1)
-
-with b1:
-    container1 = st.container()
-    allb1 = st.checkbox("Seleccionar Todos", key="chk1")
-    if allb1:
-        sorted_unique_mes = sorted(df['EstadoOrigen'].unique())
-        selected_mes = container1.multiselect('Origen(es):', sorted_unique_mes, sorted_unique_mes, key="Mes1")
-        df_selected_mes = df[df['EstadoOrigen'].isin(selected_mes)].astype(str)
-    else:
-        sorted_unique_mes = sorted(df['EstadoOrigen'].unique())
-        selected_mes = container1.multiselect('Origen(es)', sorted_unique_mes, key="Mes1")
-        df_selected_mes = df[df['EstadoOrigen'].isin(selected_mes)].astype(str)
+container1 = st.container()
+allb1 = st.checkbox("Seleccionar Todos", key="chk1")
+if allb1:
+    sorted_unique_mes = sorted(df['Mes'].unique())
+    selected_mes = container1.multiselect('Mes(es):', sorted_unique_mes, sorted_unique_mes, key="Mes1")
+    df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
+else:
+    sorted_unique_mes = sorted(df['Mes'].unique())
+    selected_mes = container1.multiselect('Mes(es)', sorted_unique_mes, key="Mes1")
+    df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
