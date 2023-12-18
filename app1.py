@@ -166,4 +166,141 @@ with c14:
         d14 = d14[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
         st.dataframe(d14.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
+c15, c16, c17, c18, c19, c20, c21 = st.columns([1,1,1,1,1,1,1])
+with c15:
+    with st.container(border=True):
+        st.header("15")
+        day15 = df.groupby(by=['Día'])
+        d15 = day15.apply(lambda x: x[x['Día'] == 15])
+        d15 = d15[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d15.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
+with c16:
+    with st.container(border=True):
+        st.header("16")
+        day16 = df.groupby(by=['Día'])
+        d16 = day16.apply(lambda x: x[x['Día'] == 16])
+        d16 = d16[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d16.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c17:
+    with st.container(border=True):
+        st.header("17")
+        day17 = df.groupby(by=['Día'])
+        d17 = day10.apply(lambda x: x[x['Día'] == 17])
+        d17 = d17[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d17.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c18:
+    with st.container(border=True):
+        st.header("18")
+        day18 = df.groupby(by=['Día'])
+        d18 = day18.apply(lambda x: x[x['Día'] == 18])
+        d18 = d18[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d18.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c19:
+    with st.container(border=True):
+        st.header("19")
+        day19 = df.groupby(by=['Día'])
+        d19 = day19.apply(lambda x: x[x['Día'] == 19])
+        d19 = d19[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d19.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c20:
+    with st.container(border=True):
+        st.header("20")
+        day20 = df.groupby(by=['Día'])
+        d20 = day20.apply(lambda x: x[x['Día'] == 20])
+        d20 = d20[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d20.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c21:
+    with st.container(border=True):
+        st.header("21")
+        day21 = df.groupby(by=['Día'])
+        d21 = day21.apply(lambda x: x[x['Día'] == 21])
+        d21 = d21[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d21.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+
+c22, c23, c24, c25, c26, c27, c28 = st.columns([1,1,1,1,1,1,1])
+with c22:
+    with st.container(border=True):
+        st.header("22")
+        day22 = df.groupby(by=['Día'])
+        d22 = day22.apply(lambda x: x[x['Día'] == 22])
+        d22 = d22[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d22.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c23:
+    with st.container(border=True):
+        st.header("23")
+        day23 = df.groupby(by=['Día'])
+        d23 = day23.apply(lambda x: x[x['Día'] == 23])
+        d23 = d23[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d23.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c24:
+    with st.container(border=True):
+        st.header("24")
+        day24 = df.groupby(by=['Día'])
+        d24 = day24.apply(lambda x: x[x['Día'] == 24])
+        d24 = d24[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d24.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c25:
+    with st.container(border=True):
+        st.header("25")
+        day25 = df.groupby(by=['Día'])
+        d25 = day18.apply(lambda x: x[x['Día'] == 25])
+        d25 = d25[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d25.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c26:
+    with st.container(border=True):
+        st.header("26")
+        day26 = df.groupby(by=['Día'])
+        d26 = day26.apply(lambda x: x[x['Día'] == 26])
+        d26 = d26[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d26.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c27:
+    with st.container(border=True):
+        st.header("27")
+        day27 = df.groupby(by=['Día'])
+        d27 = day27.apply(lambda x: x[x['Día'] == 27])
+        d27 = d27[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d27.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c28:
+    with st.container(border=True):
+        st.header("28")
+        day28 = df.groupby(by=['Día'])
+        d28 = day28.apply(lambda x: x[x['Día'] == 28])
+        d28 = d28[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d28.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+c29, c30, c31 = st.columns([1,1,1,1,1,1,1])
+with c29:
+    with st.container(border=True):
+        st.header("29")
+        day29 = df.groupby(by=['Día'])
+        d29 = day29.apply(lambda x: x[x['Día'] == 29])
+        d29 = d29[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d29.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+with c30:
+    with st.container(border=True):
+        st.header("30")
+        day30 = df.groupby(by=['Día'])
+        d30 = day30.apply(lambda x: x[x['Día'] == 22])
+        d30 = d30[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d30.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+with c31:
+    with st.container(border=True):
+        st.header("31")
+        day31 = df.groupby(by=['Día'])
+        d31 = day31.apply(lambda x: x[x['Día'] == 31])
+        d31 = d31[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(d31.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
