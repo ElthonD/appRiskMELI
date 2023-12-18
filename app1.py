@@ -42,6 +42,8 @@ def createPage():
 
     st.dataframe(df)
 
+    return True
+
     """
     c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
     with c1:
