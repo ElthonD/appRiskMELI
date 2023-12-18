@@ -53,11 +53,9 @@ container1.write("This is inside the container1")
 container2 = st.container(border=True)
 container2.write("This is inside the container2")
 
-
-
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
-    with st.container():
+    with st.container(border=True):
         st.header("1")
         day1 = df.groupby(by=['Día'])
         d1 = day1.apply(lambda x: x[x['Día'] == 1])
@@ -87,7 +85,7 @@ with c4:
     st.dataframe(d4.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
 
 with c5:
-    with st.container():
+    with st.container(border=True):
         st.header("5")
         day5 = df.groupby(by=['Día'])
         d5 = day5.apply(lambda x: x[x['Día'] == 5])
