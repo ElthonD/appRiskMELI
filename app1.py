@@ -48,6 +48,13 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
 
+container1 = st.container(border=True)
+container1.write("This is inside the container1")
+container2 = st.container(border=True)
+container2.write("This is inside the container2")
+
+
+
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
     with st.container():
