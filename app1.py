@@ -9,20 +9,28 @@ from streamlit_folium import folium_static
 from dateutil.relativedelta import *
 import seaborn as sns; sns.set_theme()
 import numpy as np
-import requests
+from PIL import Image
 
 # Configuración warnings
 # ==============================================================================
 import warnings
 warnings.filterwarnings('ignore')
 
-
+path_favicon = './img/favicon.ico'
+im = Image.open(path_favicon)
 st.set_page_config(
     page_title="AI27",
-    page_icon="🧊",
+    page_icon= im,
     layout="wide",
 )
-    
+
+# Title of the main page
+pathLogo = './img/AI27Mercadolibre.png'
+display = Image.open(pathLogo)
+display = np.array(display)
+col1, col2, col3 = st.columns([1,5,1])
+col2.image(display, use_column_width=True)
+
 @st.cache_data(show_spinner='Cargando Datos... Espere...', persist=True)
 def load_HR():
 
@@ -51,6 +59,7 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 #st.dataframe(df.style.applymap(lambda x: 'background-color: red' if x == "Consumado" else 'background-color: green', subset=['Tipo evento']), hide_index= True)
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
+st.markdown("<h3 style='text-align: left;'>PLANNER MENSUAL</h3>", unsafe_allow_html=True)
 
 container1 = st.container()
 allb1 = st.checkbox("Seleccionar Todos", key="chk1")
@@ -63,258 +72,238 @@ else:
     selected_mes = container1.multiselect('Mes(es):', sorted_unique_mes, key="Mes2")
     df_selected_mes = df[df['Mes'].isin(selected_mes)].astype(str)
 
+st.dataframe(df_selected_mes)
+
+days = df.loc[df.loc[:, 'Día'] == 1]
+st.dataframe(days)
+
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
     with st.container(border=True):
-        #st.header("1")
-        st.markdown("<h3 style='text-align: left;'>1</h3>", unsafe_allow_html=True)
-        day1 = df_selected_mes.groupby(by=['Día'])
-        d1 = day1.apply(lambda x: x[x['Día'] == 1])
-        d1 = d1[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d1.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>1</h5>", unsafe_allow_html=True)
+        day1 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 1]
+        day1 = day1[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day1.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c2:
     with st.container(border=True):
-        st.header("2")
-        day2 = df_selected_mes.groupby(by=['Día'])
-        d2 = day2.apply(lambda x: x[x['Día'] == 2])
-        d2 = d2[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d2.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>2</h5>", unsafe_allow_html=True)
+        day2 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 2]
+        day2 = day2[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day2.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c3:
     with st.container(border=True):
-        st.header("3")
-        day3 = df_selected_mes.groupby(by=['Día'])
-        d3 = day3.apply(lambda x: x[x['Día'] == 3])
-        d3 = d3[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d3.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>3</h5>", unsafe_allow_html=True)
+        day3 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 3]
+        day3 = day3[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day3.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c4:
     with st.container(border=True):
-        st.header("4")
-        day4 = df_selected_mes.groupby(by=['Día'])
-        d4 = day4.apply(lambda x: x[x['Día'] == 4])
-        d4 = d4[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d4.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>4</h5>", unsafe_allow_html=True)
+        day4 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 4]
+        day4 = day4[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day3.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c5:
     with st.container(border=True):
-        st.header("5")
-        day5 = df_selected_mes.groupby(by=['Día'])
-        d5 = day5.apply(lambda x: x[x['Día'] == 5])
-        d5 = d5[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d5.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>5</h5>", unsafe_allow_html=True)
+        day5 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 5]
+        day5 = day5[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day5.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c6:
     with st.container(border=True):
-        st.header("6")
-        day6 = df_selected_mes.groupby(by=['Día'])
-        d6 = day6.apply(lambda x: x[x['Día'] == 6])
-        d6 = d6[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d6.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>6</h5>", unsafe_allow_html=True)
+        day6 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 6]
+        day6 = day6[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day6.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c7:
     with st.container(border=True):
-        st.header("7")
-        day7 = df_selected_mes.groupby(by=['Día'])
-        d7 = day7.apply(lambda x: x[x['Día'] == 7])
-        d7 = d7[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d7.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>7</h5>", unsafe_allow_html=True)
+        day7 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 7]
+        day7 = day7[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day7.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 c8, c9, c10, c11, c12, c13, c14 = st.columns([1,1,1,1,1,1,1])
 with c8:
     with st.container(border=True):
-        st.header("8")
-        day8 = df_selected_mes.groupby(by=['Día'])
-        d8 = day8.apply(lambda x: x[x['Día'] == 8])
-        d8 = d8[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d8.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>8</h5>", unsafe_allow_html=True)
+        day8 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 8]
+        day8 = day8[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day8.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c9:
     with st.container(border=True):
-        st.header("9")
-        day9 = df_selected_mes.groupby(by=['Día'])
-        d9 = day9.apply(lambda x: x[x['Día'] == 9])
-        d9 = d9[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d9.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>9</h5>", unsafe_allow_html=True)
+        day9 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 9]
+        day9 = day9[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day9.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c10:
     with st.container(border=True):
-        st.header("10")
-        day10 = df_selected_mes.groupby(by=['Día'])
-        d10 = day10.apply(lambda x: x[x['Día'] == 10])
-        d10 = d10[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d10.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>10</h5>", unsafe_allow_html=True)
+        day10 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 10]
+        day10 = day10[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day10.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c11:
     with st.container(border=True):
-        st.header("11")
-        day11 = df_selected_mes.groupby(by=['Día'])
-        d11 = day11.apply(lambda x: x[x['Día'] == 11])
-        d11 = d11[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d11.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>11</h5>", unsafe_allow_html=True)
+        day11 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 11]
+        day11 = day11[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day11.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c12:
     with st.container(border=True):
-        st.header("12")
-        day12 = df_selected_mes.groupby(by=['Día'])
-        d12 = day12.apply(lambda x: x[x['Día'] == 12])
-        d12 = d12[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d12.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>12</h5>", unsafe_allow_html=True)
+        day12 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 12]
+        day12 = day12[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day12.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c13:
     with st.container(border=True):
-        st.header("13")
-        day13 = df_selected_mes.groupby(by=['Día'])
-        d13 = day13.apply(lambda x: x[x['Día'] == 13])
-        d13 = d13[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d13.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>13</h5>", unsafe_allow_html=True)
+        day13 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 13]
+        day13 = day13[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day13.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c14:
     with st.container(border=True):
-        st.header("14")
-        day14 = df_selected_mes.groupby(by=['Día'])
-        d14 = day14.apply(lambda x: x[x['Día'] == 14])
-        d14 = d14[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d14.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>14</h5>", unsafe_allow_html=True)
+        day14 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 14]
+        day14 = day14[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day14.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 c15, c16, c17, c18, c19, c20, c21 = st.columns([1,1,1,1,1,1,1])
 with c15:
     with st.container(border=True):
-        st.header("15")
-        day15 = df_selected_mes.groupby(by=['Día'])
-        d15 = day15.apply(lambda x: x[x['Día'] == 15])
-        d15 = d15[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d15.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>15</h5>", unsafe_allow_html=True)
+        day15 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 15]
+        day15 = day15[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day15.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c16:
     with st.container(border=True):
-        st.header("16")
-        day16 = df_selected_mes.groupby(by=['Día'])
-        d16 = day16.apply(lambda x: x[x['Día'] == 16])
-        d16 = d16[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d16.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>16</h5>", unsafe_allow_html=True)
+        day16 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 16]
+        day16 = day16[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day16.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c17:
     with st.container(border=True):
-        st.header("17")
-        day17 = df_selected_mes.groupby(by=['Día'])
-        d17 = day10.apply(lambda x: x[x['Día'] == 17])
-        d17 = d17[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d17.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>17</h5>", unsafe_allow_html=True)
+        day17 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 17]
+        day17 = day17[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day17.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c18:
     with st.container(border=True):
-        st.header("18")
-        day18 = df_selected_mes.groupby(by=['Día'])
-        d18 = day18.apply(lambda x: x[x['Día'] == 18])
-        d18 = d18[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d18.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>18</h5>", unsafe_allow_html=True)
+        day18 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 18]
+        day18 = day18[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day18.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
 
 with c19:
     with st.container(border=True):
-        st.header("19")
-        day19 = df_selected_mes.groupby(by=['Día'])
-        d19 = day19.apply(lambda x: x[x['Día'] == 19])
-        d19 = d19[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d19.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>19</h5>", unsafe_allow_html=True)
+        day19 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 19]
+        day19 = day19[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day19.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c20:
     with st.container(border=True):
-        st.header("20")
-        day20 = df_selected_mes.groupby(by=['Día'])
-        d20 = day20.apply(lambda x: x[x['Día'] == 20])
-        d20 = d20[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d20.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>2o</h5>", unsafe_allow_html=True)
+        day20 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 20]
+        day20 = day20[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day20.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c21:
     with st.container(border=True):
-        st.header("21")
-        day21 = df_selected_mes.groupby(by=['Día'])
-        d21 = day21.apply(lambda x: x[x['Día'] == 21])
-        d21 = d21[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d21.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>21</h5>", unsafe_allow_html=True)
+        day21 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 21]
+        day21 = day21[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day21.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 c22, c23, c24, c25, c26, c27, c28 = st.columns([1,1,1,1,1,1,1])
 with c22:
     with st.container(border=True):
-        st.header("22")
-        day22 = df_selected_mes.groupby(by=['Día'])
-        d22 = day22.apply(lambda x: x[x['Día'] == 22])
-        d22 = d22[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d22.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>22</h5>", unsafe_allow_html=True)
+        day22 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 22]
+        day22 = day22[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day22.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c23:
     with st.container(border=True):
-        st.header("23")
-        day23 = df_selected_mes.groupby(by=['Día'])
-        d23 = day23.apply(lambda x: x[x['Día'] == 23])
-        d23 = d23[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d23.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>23</h5>", unsafe_allow_html=True)
+        day23 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 23]
+        day23 = day23[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day23.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c24:
     with st.container(border=True):
-        st.header("24")
-        day24 = df_selected_mes.groupby(by=['Día'])
-        d24 = day24.apply(lambda x: x[x['Día'] == 24])
-        d24 = d24[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d24.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>24</h5>", unsafe_allow_html=True)
+        day24 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 24]
+        day24 = day24[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day24.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c25:
     with st.container(border=True):
-        st.header("25")
-        day25 = df_selected_mes.groupby(by=['Día'])
-        d25 = day18.apply(lambda x: x[x['Día'] == 25])
-        d25 = d25[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d25.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>25</h5>", unsafe_allow_html=True)
+        day25 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 25]
+        day25 = day25[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day25.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c26:
     with st.container(border=True):
-        st.header("26")
-        day26 = df_selected_mes.groupby(by=['Día'])
-        d26 = day26.apply(lambda x: x[x['Día'] == 26])
-        d26 = d26[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d26.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>26</h5>", unsafe_allow_html=True)
+        day26 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 26]
+        day26 = day26[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day26.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c27:
     with st.container(border=True):
-        st.header("27")
-        day27 = df_selected_mes.groupby(by=['Día'])
-        d27 = day27.apply(lambda x: x[x['Día'] == 27])
-        d27 = d27[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d27.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>27</h5>", unsafe_allow_html=True)
+        day27 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 27]
+        day27 = day27[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day27.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c28:
     with st.container(border=True):
-        st.header("28")
-        day28 = df_selected_mes.groupby(by=['Día'])
-        d28 = day28.apply(lambda x: x[x['Día'] == 28])
-        d28 = d28[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d28.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>28</h5>", unsafe_allow_html=True)
+        day28 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 28]
+        day28 = day28[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day28.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 c29, c30, c31, c32, c33, c34, c35 = st.columns([1,1,1,1,1,1,1])
 with c29:
     with st.container(border=True):
-        st.header("29")
-        day29 = df_selected_mes.groupby(by=['Día'])
-        d29 = day29.apply(lambda x: x[x['Día'] == 29])
-        d29 = d29[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d29.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>29</h5>", unsafe_allow_html=True)
+        day29 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 29]
+        day29 = day29[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day29.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c30:
     with st.container(border=True):
-        st.header("30")
-        day30 = df_selected_mes.groupby(by=['Día'])
-        d30 = day30.apply(lambda x: x[x['Día'] == 22])
-        d30 = d30[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d30.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>30</h5>", unsafe_allow_html=True)
+        day30 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 30]
+        day30 = day30[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day30.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
 with c31:
     with st.container(border=True):
-        st.header("31")
-        day31 = df_selected_mes.groupby(by=['Día'])
-        d31 = day31.apply(lambda x: x[x['Día'] == 31])
-        d31 = d31[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
-        st.dataframe(d31.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+        st.markdown("<h5 style='text-align: left;'>31</h5>", unsafe_allow_html=True)
+        day31 = df_selected_mes.loc[df_selected_mes.loc[:, 'Día'] == 31]
+        day31 = day31[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        st.dataframe(day31.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+
+        #day31 = df_selected_mes.groupby(by=['Día'])
+        #d31 = day31.apply(lambda x: x[x['Día'] == 31])
+        #d31 = d31[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo']]
+        #st.dataframe(d31.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
 
 with c32:
     st.container(border=None)
