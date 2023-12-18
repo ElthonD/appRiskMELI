@@ -17,6 +17,11 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+st.set_page_config(
+    page_title="AI27",
+    page_icon="🧊",
+    layout="wide",
+)
     
 @st.cache_data(show_spinner='Cargando Datos... Espere...', persist=True)
 def load_HR():
@@ -47,12 +52,6 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 #st.dataframe(df.style.applymap(lambda x: 'background-color: red' if x == "Consumado" else 'background-color: green', subset=['Tipo evento']), hide_index= True)
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
-
-st.set_page_config(
-    page_title="AI27",
-    page_icon="🧊",
-    layout="wide",
-)
 
 container1 = st.container(border=True)
 container1.write("This is inside the container1")
