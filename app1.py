@@ -38,7 +38,38 @@ def createPage():
 
     df = load_HR()
 
+    df = df[['Año', 'Tipo evento', 'Hora', 'Estado', 'Tramo']]
 
+    st.dataframe(df)
 
+    """
+    c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
+    with c1:
+        st.header("1")
+        st.dataframe(df)
 
+    with c2:
+        st.header("2")
+        st.dataframe(df)
+
+    with c3:
+        st.header("3")
+        st.dataframe(df)
+
+    with c4:
+        st.header("4")
+        st.dataframe(df)
+
+    with c5:
+        st.header("5")
+        st.dataframe(df)
+
+    with c6:
+        st.header("6")
+        st.dataframe(df)
+
+    with c7:
+        st.header("7")
+        st.dataframe(df)
+"""
 
