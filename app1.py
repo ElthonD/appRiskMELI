@@ -40,9 +40,9 @@ df = load_HR()
 
 df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
 
-day1 = df.groupby(['Día'] == 1)
-
-st.dataframe(day1)
+day1 = df.groupby(by=['Día'])
+d1 = day1.apply(lambda x: x[x['Día'] == 1])
+st.dataframe(d1)
 
 #df['Estatus'] = df['Tipo evento'].map(lambda x: 1 if x == "Consumado" else 0)
 
