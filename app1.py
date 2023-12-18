@@ -50,7 +50,7 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 c1, c2, c3, c4, c5, c6, c7 = st.columns([1,1,1,1,1,1,1])
 with c1:
-    c1.container(border=True)
+    c1.container()
     st.header("1")
     day1 = df.groupby(by=['Día'])
     d1 = day1.apply(lambda x: x[x['Día'] == 1])
@@ -80,7 +80,7 @@ with c4:
     st.dataframe(d4.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True, use_container_width=True)
 
 with c5:
-    c5.container(border=True)
+    c5.container()
     st.header("5")
     day5 = df.groupby(by=['Día'])
     d5 = day5.apply(lambda x: x[x['Día'] == 5])
