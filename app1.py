@@ -40,23 +40,17 @@ df = load_HR()
 
 df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
 
-df['Estatus'] = df['Tipo evento'].map(lambda x: 1 if x == "Consumado" else 0)
+day1 = df.groupby(['Día'] == 1)
 
-st.dataframe(df.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+st.dataframe(day1)
+
+#df['Estatus'] = df['Tipo evento'].map(lambda x: 1 if x == "Consumado" else 0)
+
+#El de abajo sirve
+#st.dataframe(df.style.applymap(lambda x: 'color: red' if x == "Consumado" else 'color: green', subset=['Tipo evento']), hide_index= True)
+#st.dataframe(df.style.applymap(lambda x: 'background-color: red' if x == "Consumado" else 'background-color: green', subset=['Tipo evento']), hide_index= True)
 
 #st.dataframe(df['Estatus'].style.map(lambda x: 'color: red' if x == 0 else 'color: green'))
-
-def _color_red_or_green(val):
-    color = 'red' if val == 0 else 'green'
-    return f'background-color: {color}'
-
-def color_survived(val):
-    color = 'green' if val else 'red'
-    return f'background-color: {color}'
-
-df.style.applymap(_color_red_or_green)
-
-st.dataframe(df)
 
 """
     c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
