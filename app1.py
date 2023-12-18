@@ -42,12 +42,11 @@ df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día'
 
 df['Estatus'] = df['Tipo evento'].map(lambda x: 1 if x == "Consumado" else 0)
 
-#def _color_red_or_green(val):
-    #color = 'red' if val == 0 else 'green'
-    #return 'color: %s' % color
+def _color_red_or_green(val):
+    color = 'red' if val == 0 else 'green'
+    return 'color: %s' % color
 
-#df.style.applymap(_color_red_or_green)
-
+df.style.applymap(_color_red_or_green)
 
 st.dataframe(df)
 
