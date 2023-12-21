@@ -190,7 +190,7 @@ def resultados_proba(uploaded_file):
     
 @st.cache_resource
 def load_model():
-    return pickle.load(open('proba_robo_mondelez1.pkl', 'rb'))
+    return pickle.load(open('risk_prob_meli.pkl', 'rb'))
 
 df = load_HR()
 df1 = load_AR()
