@@ -50,6 +50,28 @@ def load_HR():
 
     return Robos
 
+@st.cache_data(show_spinner='Cargando Datos... Espere...', persist=True)
+def load_AN():
+    
+    rutaAR = './data/Anomalias MELI.xlsx'
+    ER = pd.read_excel(rutaAR, sheet_name = "Data")
+    ER['Comentarios'] = ER['Comentarios'].fillna('SIN COMENTARIOS')
+    ER['Anomalía'] = ER['Anomalía'].fillna('SIN ALERTAS')
+    ER['Comentarios'] = ER['Comentarios'].astype(str)
+    ER['Anomalía'] = ER['Anomalía'].astype(str)
+    ER['Cliente'] = ER['Cliente'].astype(str)
+    ER['Fecha'] = pd.to_datetime(ER['Fecha'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    ER['Año'] = ER['Fecha'].apply(lambda x: x.year)
+    ER['MesN'] = ER['Fecha'].apply(lambda x: x.month)
+    ER['Mes'] = ER['MesN'].map({1:"Enero", 2:"Febrero", 3:"Marzo", 4:"Abril", 5:"Mayo", 6:"Junio", 7:"Julio", 8:"Agosto", 9:"Septiembre", 10:"Octubre", 11:"Noviembre", 12:"Diciembre"})
+    ER['Dia'] = ER['Fecha'].apply(lambda x: x.day)
+    ER['Hora'] = ER['Fecha'].apply(lambda x: x.hour)
+    ER['Latitud'].fillna(ER['Latitud'].mean(), inplace=True)
+    ER['Longitud'].fillna(ER['Longitud'].mean(), inplace=True)
+    ER = ER.dropna()
+
+    return ER
+
 @st.cache_data(show_spinner='Procesando Datos... Espere...', persist=True)
 def load_AR():
     rutaAR = './data/Anomalias Robos MELI.xlsx'
@@ -68,7 +90,7 @@ def GenerarMapaBase(Centro=[20.5223, -99.8883], zoom=8):
         MapaBase = folium.Map(location=Centro, control_scale=True, zoom_start=zoom)
         return MapaBase
 
-def map_coropleta_fol(df, df1):
+def map_coropleta_fol(df, df2):
     
         #geojson_url = './data/mexicoHigh.json'
         geojson_url = 'https://raw.githubusercontent.com/angelnmara/geojson/master/mexicoHigh.json'
@@ -126,14 +148,13 @@ def map_coropleta_fol(df, df1):
             Highlight= True,
             ).add_to(MapaMexico1)
 
-        df1 = df.copy()
-        df1['Contar'] = 1
+        df2['Contar'] = 1
         df_hora1 = []
 
-        for hour in df1.Hora.sort_values().unique():
-            df_hora1.append(df1.loc[df1.Hora == hour, ['Latitud', 'Longitud', 'Contar']].groupby(['Latitud', 'Longitud']).sum().reset_index().values.tolist())
+        for hour in df2.Hora.sort_values().unique():
+            df_hora1.append(df2.loc[df2.Hora == hour, ['Latitud', 'Longitud', 'Contar']].groupby(['Latitud', 'Longitud']).sum().reset_index().values.tolist())
     
-        HeatMapWithTime(df_hora1, radius=5, gradient={0.2: 'blue', 0.4: 'lime', 0.6: 'orange', 1: 'red'}, min_opacity=0.5, max_opacity=0.8, use_local_extrema=True).add_to(MapaMexico1)
+        HeatMapWithTime(df_hora1, radius=5, gradient={0.2: 'blue', 0.4: 'lime', 0.6: 'orange', 1: 'red'}, name="Mapa Calor", min_opacity=0.5, max_opacity=0.8, use_local_extrema=True).add_to(MapaMexico1)
 
         MapaMexico1.add_child(FeatRobo)
         folium.LayerControl().add_to(MapaMexico1)
@@ -172,6 +193,7 @@ def load_model():
 
 df = load_HR()
 df1 = load_AR()
+df2 = load_AN()
 
 #df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
 
@@ -437,8 +459,16 @@ with c35:
 st.markdown("<h3 style='text-align: left;'>MAPA DE CALOR</h3>", unsafe_allow_html=True)
 
 # Mapa
-    
-mapa = map_coropleta_fol(df_selected_mes, df1)
+
+
+d1 = df_selected_mes.copy()
+d2 = df2.copy() # anom
+
+d1['Cod1'] = d1.Cliente + d1.Año.astype(str) + d1.Mes
+d2['Cod2'] = d2.Cliente + d2.Año.astype(str) + d2.Mes
+filtro = d2[d2['Cod2'].isin(d1['Cod1'])]
+
+mapa = map_coropleta_fol(df_selected_mes, filtro)
 
 #Modulo de Predictivo
 st.markdown("<h3 style='text-align: left;'>% Riesgo de los Servicios</h3>", unsafe_allow_html=True)
