@@ -10,6 +10,8 @@ from dateutil.relativedelta import *
 import seaborn as sns; sns.set_theme()
 import numpy as np
 from PIL import Image
+import requests
+import pickle
 
 # Configuración warnings
 # ==============================================================================
@@ -48,7 +50,128 @@ def load_HR():
 
     return Robos
 
+@st.cache_data(show_spinner='Procesando Datos... Espere...', persist=True)
+def load_AR():
+    rutaAR = './data/Anomalias Robos MELI.xlsx'
+    AR = pd.read_excel(rutaAR, sheet_name = "Data")
+    AR['Año'] = AR['Fecha'].apply(lambda x: x.year)
+    AR['MesN'] = AR['Fecha'].apply(lambda x: x.month)
+    AR['Mes'] = AR['MesN'].map({1:"Enero", 2:"Febrero", 3:"Marzo", 4:"Abril", 5:"Mayo", 6:"Junio", 7:"Julio", 8:"Agosto", 9:"Septiembre", 10:"Octubre", 11:"Noviembre", 12:"Diciembre"})
+    AR['Hora'] = AR['Fecha'].apply(lambda x: x.hour)
+    AR['Estadías NOM-087'] = AR['DuracionEstimada'].map(lambda x: int(x/5) if x > 5 else 0)
+    #AR['Estadías NOM-087'] = np.ceil(AR['Estadías NOM-087']) 
+    AR = AR.drop(['Número Envío'], axis=1)
+    AR = AR.dropna()
+    return AR
+
+def GenerarMapaBase(Centro=[20.5223, -99.8883], zoom=8):
+        MapaBase = folium.Map(location=Centro, control_scale=True, zoom_start=zoom)
+        return MapaBase
+
+def map_coropleta_fol(df, df1):
+    
+        #geojson_url = './data/mexicoHigh.json'
+        geojson_url = 'https://raw.githubusercontent.com/angelnmara/geojson/master/mexicoHigh.json'
+        mx_estados_geo = requests.get(geojson_url).json()
+
+        MapaMexico1 = GenerarMapaBase()
+
+        FeatRobo = folium.FeatureGroup(name='Robos')
+        #Recorrer marco de datos y agregar cada punto de datos al grupo de marcadores
+        Latitudes2 = df['Latitud'].to_list()
+        Longitudes2 = df['Longitud'].to_list()
+        Popups2 = df['Cliente'].to_list()
+        Popups3 = df['Tipo evento'].to_list()
+        Popups4 = df['Estado'].to_list()
+        Popups5 = df['Origen'].to_list()
+        Popups6 = df['Destinos'].to_list()
+        Popups7 = df['Línea transportista'].to_list()
+        Popups8 = df['Fecha y Hora'].to_list()
+
+        for lat2, long2, pop2, pop3, pop4, pop5, pop6, pop7, pop8 in list(zip(Latitudes2, Longitudes2, Popups2, Popups3, Popups4, Popups5, Popups6, Popups7, Popups8)):
+            fLat2 = float(lat2)
+            fLon2 = float(long2)
+            if pop3 == "Consumado":
+                folium.Circle(
+                    radius=200,
+                    location=[fLat2,fLon2],
+                    popup= [pop2,pop3,pop4, pop5, pop6, pop7, pop8],
+                    fill=False,
+                    color="darkred").add_to(FeatRobo)
+            else:
+                folium.Circle(
+                    radius=200,
+                    location=[fLat2,fLon2],
+                    popup= [pop2,pop3,pop4, pop5, pop6, pop7, pop8],
+                    fill=False,
+                    color="darkgreen").add_to(FeatRobo)
+        
+        df1 = pd.DataFrame(pd.value_counts(df['Estado']))
+        df1 = df1.reset_index()
+        df1.rename(columns={'index':'Estado','Estado':'Total'},inplace=True)
+
+        folium.Choropleth(
+            geo_data=mx_estados_geo,
+            name="Mapa Coropleta",
+            data=df1,
+            columns=["Estado", "Total"],
+            key_on="feature.properties.name",
+            fill_color="OrRd",
+            fill_opacity=0.7,
+            line_opacity=.1,
+            legend_name="Total de Robos",
+            nan_fill_color = "White",
+            show=True,
+            overlay=True,
+            Highlight= True,
+            ).add_to(MapaMexico1)
+
+        df1 = df.copy()
+        df1['Contar'] = 1
+        df_hora1 = []
+
+        for hour in df1.Hora.sort_values().unique():
+            df_hora1.append(df1.loc[df1.Hora == hour, ['Latitud', 'Longitud', 'Contar']].groupby(['Latitud', 'Longitud']).sum().reset_index().values.tolist())
+    
+        HeatMapWithTime(df_hora1, radius=5, gradient={0.2: 'blue', 0.4: 'lime', 0.6: 'orange', 1: 'red'}, min_opacity=0.5, max_opacity=0.8, use_local_extrema=True).add_to(MapaMexico1)
+
+        MapaMexico1.add_child(FeatRobo)
+        folium.LayerControl().add_to(MapaMexico1)
+        #Agregar Botón de Pantalla Completa 
+        plugins.Fullscreen(position="topright").add_to(MapaMexico1)
+
+        #Mostrar Mapa
+        folium_static(MapaMexico1, width=1370)
+
+def df_proba_robo(uploaded_file):
+        
+        input_df = pd.read_excel(uploaded_file, sheet_name = "Plantilla")
+        input_df = input_df.dropna() 
+        input_df['Fecha Creación'] = pd.to_datetime(input_df['Fecha Creación'], format='%Y-%m-%d %H:%M:%S',errors='coerce')
+        input_df['Duración'] = input_df['Duración'].astype(int)
+        input_df['Mes'] = input_df['Fecha Creación'].apply(lambda x: x.month)
+        input_df['DiadelAño'] = input_df['Fecha Creación'].apply(lambda x: x.dayofyear)
+        input_df['SemanadelAño'] = input_df['Fecha Creación'].apply(lambda x: x.weekofyear)
+        input_df['DiadeSemana'] = input_df['Fecha Creación'].apply(lambda x: x.dayofweek)
+        input_df['Quincena'] = input_df['Fecha Creación'].apply(lambda x: x.quarter)
+        input_df.drop(['Fecha Creación'], axis = 'columns', inplace=True)
+        input_df = input_df[['Origen Destino','Tipo Monitoreo', 'Tipo Unidad', 'Duración', 'Mes', 'DiadelAño', 'SemanadelAño', 'DiadeSemana', 'Quincena']]
+        return input_df
+
+def resultados_proba(uploaded_file):
+    
+    df = pd.read_excel(uploaded_file, sheet_name = "Plantilla")
+    df = df.dropna()
+    df = df[['Bitácora','Origen','Destino','Tipo Monitoreo', 'Tipo Unidad']]
+    df['Bitácora'] = df['Bitácora'].astype('str')
+    return  df
+    
+@st.cache_resource
+def load_model():
+    return pickle.load(open('proba_robo_mondelez1.pkl', 'rb'))
+
 df = load_HR()
+df1 = load_AR()
 
 #df = df[['Año', 'Tipo evento', 'Fecha y Hora', 'Estado', 'Tramo', 'Mes', 'Día']]
 
@@ -315,3 +438,67 @@ with c34:
 
 with c35:
     st.container(border=None)
+
+st.markdown("<h3 style='text-align: left;'>MAPA DE CALOR</h3>", unsafe_allow_html=True)
+
+# Mapa
+    
+mapa = map_coropleta_fol(df_selected_mes, df1)
+
+#Modulo de Predictivo
+st.markdown("<h3 style='text-align: left;'>% Riesgo de los Servicios</h3>", unsafe_allow_html=True)
+
+st.write(""" 
+Pasos a seguir para este módulo:
+1. Descargar archivo **"BITÁCORAS"** (Prebitácoras) de **Mondelez** del **Área de Centro de Monitoreo** del **PowerBI**, en el **Reporte CM**, sección **Prebitácoras**.
+2. Abrir archivos de Excel **"BITÁCORAS"** y **"Plantilla para Probabilidad de Robo"**.
+3. Convertir archivo descargado de prebitácora **"BITÁCORAS"** en plantilla para probabilidad de robo, para esto debe:
++ Copiar datos de la columna **"Creación"** del archivo **"BITÁCORAS"** y pegar en columna **"Fecha Creación"** del archivo **"Plantilla para Probabilidad de Robo"**.
++ Copiar datos de la columna **"Origen"** del archivo **"BITÁCORAS"** y pegar en columna **"Origen"** del archivo **"Plantilla para Probabilidad de Robo"**.
++ Copiar datos de la columna **"Destino"** del archivo **"BITÁCORAS"** y pegar en columna **"Destino"** del archivo **"Plantilla para Probabilidad de Robo"**.
++ Copiar datos de la columna **"Tipo Monitoreo"** del archivo **"BITÁCORAS"** y pegar en columna del mismo nombre en el archivo **"Plantilla para Probabilidad de Robo"**.
++ Registrar datos de la columna **"Tipo Unidad"** por cada servicio en el archivo **"Plantilla para Probabilidad de Robo"**
++ Por último, guardar archivo **"Plantilla para Probabilidad de Robo"**.
+4. Finalmente, subir archivo **"Plantilla para Probabilidad de Robo"** en la aplicación.
+""")
+
+uploaded_file = st.file_uploader("Subir archivo Excel de pre-bitácora", type=['xlsx'])
+
+if uploaded_file is not None:
+
+    entrada_datos = df_proba_robo(uploaded_file)
+
+else:
+    st.warning("Se requiere subir archivo Excel")
+
+dsr = df.copy()
+dsr.drop(['Bitácora','Total Anomalías','Calificación','TiempoCierreServicio','Cliente','Origen','Estado Origen','Destinos','Estado Destino','Línea Transportista','Inicio','Arribo','Finalización','Tiempo Recorrido'], axis = 'columns', inplace=True)
+dsr = dsr[['Origen Destino','Tipo Monitoreo', 'Tipo Unidad', 'Duración', 'Mes', 'DiadelAño', 'SemanadelAño', 'DiadeSemana', 'Quincena', 'Robo']]
+data_sr = dsr.drop(columns=['Robo'])
+data_proba_robos = pd.concat([entrada_datos,data_sr],axis=0)
+
+# Codificación de características ordinales
+
+encode = ['Origen Destino', 'Tipo Unidad', 'Tipo Monitoreo']
+for col in encode:
+    dummy = pd.get_dummies(data_proba_robos[col], prefix=col)
+    data_proba_robos = pd.concat([data_proba_robos,dummy], axis=1)
+    del data_proba_robos[col]
+
+cantidad_datos_input = len(entrada_datos)
+data_proba_robos1 = data_proba_robos[:cantidad_datos_input] # Selects only the first row (the user input data)
+
+load_clf = load_model()
+prediction_proba = load_clf.predict_proba(data_proba_robos1)
+
+st.markdown("<h5 style='text-align: left;'>% Riesgo de los Servicios</h5>", unsafe_allow_html=True)
+prediction_proba1 = pd.DataFrame(prediction_proba, columns = ['NO','SI'])
+entrada_datos1 = resultados_proba(uploaded_file)
+entrada_datos2 = pd.concat([entrada_datos1,prediction_proba1], axis=1)
+entrada_datos2 = entrada_datos2[['Bitácora','Origen','Destino','Tipo Monitoreo', 'Tipo Unidad', 'SI']]
+entrada_datos2 = entrada_datos2.rename(columns={'SI':'% Riesgo'})
+entrada_datos2['% Riesgo'] = round(entrada_datos2['% Riesgo'] * 100,2)
+
+col1, col2, col3 = st.columns([1,5,1])
+with col2:
+    st.write(entrada_datos2)
